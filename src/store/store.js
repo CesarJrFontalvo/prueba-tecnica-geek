@@ -1,5 +1,7 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
 import thunk from 'redux-thunk';
+import { loginReducer } from '../reducers/loginReducer';
+import { registerReducer } from '../reducers/registerReducer';
 import { resetaReducers } from '../reducers/resetaReducer';
 
 
@@ -7,7 +9,9 @@ const composeEnhancers = (typeof window !== 'undefined' &&
 window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const reducers = combineReducers({
-    reseta: resetaReducers
+    reseta: resetaReducers,
+    login: loginReducer,
+    register: registerReducer,
 })
 
 

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Button, Container, Navbar } from 'react-bootstrap'
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../actions/actionLogin';
 import { listResetaAsync } from '../actions/actionReseta';
-import {useForm } from '../hooks/useForm';
+
 
 const Ingredientes = ({
     price,
@@ -16,31 +18,47 @@ const Ingredientes = ({
       setIsChecked(!isChecked);
     };
 
-    const [ values, handleInputChange ] = useForm({
-        cantidad:'',
-        seleccion:'',
-       
-    })
-
-    const {cantidad} = values;
+    const navigate = useNavigate();
     // console.log(values.cantidad,values.seleccion)
     const dispatch = useDispatch();
 
-    
+    const [checkSelecte, setCheckSelecte] = useState([]);
+    const [numberSelecte, setNumberSelecte] = useState([]);
+
+    const handleChangeChekBox=e=>{
+        let auxiliar=null
+        if (checkSelecte.includes(e.target.value)) {
+            auxiliar=checkSelecte.filter(elemento=>elemento!==e.target.value)
+        } else {
+            auxiliar=checkSelecte.concat(e.target.value)
+        }
+        setCheckSelecte(auxiliar);
+        console.log(auxiliar);
+    }
+    const handleChangeNumber=e=>{
+        let number=null
+        if (numberSelecte.includes(e.target.value)) {
+            number=numberSelecte.filter(elemento=>elemento!==e.target.value)
+        } else {
+            number=numberSelecte.concat(e.target.value)
+        }
+        setNumberSelecte(number);
+        console.log(number);
+    }
     
     const { listaReseta } = useSelector(store => store.reseta);
     console.log(listaReseta);
 
-   
-    
-
+    const handleLogout = () => {
+        dispatch(logout())
+        navigate("/")
+    }
     
     useEffect(() => {
         dispatch(listResetaAsync())
-       console.log(values)
+   
        
-        
-     }, [dispatch,values])
+     }, [dispatch])
     
     return (
         <div className='mb-5'>
@@ -51,6 +69,7 @@ const Ingredientes = ({
                             <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM6.5 7h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1 0-1z" />
                         </svg>
                     </Navbar.Brand>
+                    <Button variant="danger" onClick={() => handleLogout()}>Logout</Button>
                 </Container>
             </Navbar>
 
@@ -61,7 +80,8 @@ const Ingredientes = ({
                     <h6>INGREDIENTES</h6>
                     <h1>Risotto de setas (vegano)</h1>
                 </div>
-                <h6 className="azul"><input type="checkbox" /> Seleccionar todo | <input type="checkbox" /> Deseleccionar todo</h6>
+                <h6 className="azul"><input type="checkbox" checked={isChecked}
+                             onChange={handleOnChange} /> Seleccionar todo | <input type="checkbox" /> Deseleccionar todo</h6>
                 <hr className="azul" />
 
                 <table className="table text-center mt-3 " >
@@ -81,9 +101,8 @@ const Ingredientes = ({
                           
                         <tr  >
                             
-                            <td><input id="check" type="checkbox" name="seleccion"   checked={isChecked}
-                             onChange={handleOnChange} /></td>
-                            <td ><input id="number" className="azul" type="number" name='cantidad' values={cantidad} onChange={handleInputChange}  /></td>
+                            <td><input id="check" type="checkbox" name="seleccion" value={e.price} onChange={handleChangeChekBox}/></td>
+                            <td ><input id="number" className="azul" type="number" name='cantidad' onChange={handleChangeNumber}  /></td>
                             <td class="text-start">
                                 <tr>{e.product}</tr>
                                 <td>{e.marca}</td>
@@ -105,7 +124,7 @@ const Ingredientes = ({
                     <h6 className='mb-3'>Items:  {isChecked ? "Seleccionaste todos los productos" : ""}</h6>
                     <h6 className='mb-3'>Subtotal</h6>
                     <h6 className='mb-3'>Gastos de envío {price}</h6>
-                    <h6 className='mb-3'>Total {cantidad}</h6>
+                    <h6 className='mb-3'>Total {checkSelecte}</h6>
           
                     <div className="d-grid gap-2">
                         <Button id="pagar" variant="success" size="lg" className='mb-2'>
