@@ -14,27 +14,18 @@ const Ingredientes = ({
 
     const [isChecked, setIsChecked] = useState(false);
 
-    const handleOnChange = () => {
+    const handleOnChange2 = () => {
       setIsChecked(!isChecked);
     };
 
     const navigate = useNavigate();
     // console.log(values.cantidad,values.seleccion)
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();   
 
-    const [checkSelecte, setCheckSelecte] = useState([]);
+    
     const [numberSelecte, setNumberSelecte] = useState([]);
 
-    const handleChangeChekBox=e=>{
-        let auxiliar=null
-        if (checkSelecte.includes(e.target.value)) {
-            auxiliar=checkSelecte.filter(elemento=>elemento!==e.target.value)
-        } else {
-            auxiliar=checkSelecte.concat(e.target.value)
-        }
-        setCheckSelecte(auxiliar);
-        console.log(auxiliar);
-    }
+   
     const handleChangeNumber=e=>{
         let number=null
         if (numberSelecte.includes(e.target.value)) {
@@ -45,7 +36,37 @@ const Ingredientes = ({
         setNumberSelecte(number);
         console.log(number);
     }
-    
+// -------------------------------------------------------------
+    const getFormattedPrice = (price) => `$${price.toFixed(2)}`;
+
+    const [checkedState, setCheckedState] = useState(
+       [false,false,false,false,false,false,false,false,false]
+    );
+
+    const [total, setTotal] = useState(0);
+
+    const handleOnChange = (position) => {
+        const updatedCheckedState = checkedState.map((item, index) =>
+        index === position ? !item : item
+        );
+
+        setCheckedState(updatedCheckedState);
+
+        const totalPrice = updatedCheckedState.reduce(
+        (sum, currentState, index) => {
+            if (currentState === true) {
+            return sum + listaReseta[index].price;
+            }
+            return sum;
+        },
+        0
+        );
+
+        setTotal(totalPrice);
+        console.log(totalPrice)
+    };
+
+// ------MOSTRAR DATOS DE FIREBASE -----------
     const { listaReseta } = useSelector(store => store.reseta);
     console.log(listaReseta);
 
@@ -53,12 +74,12 @@ const Ingredientes = ({
         dispatch(logout())
         navigate("/")
     }
-    
+
     useEffect(() => {
         dispatch(listResetaAsync())
-   
-       
-     }, [dispatch])
+        
+      
+     }, [dispatch,])
     
     return (
         <div className='mb-5'>
@@ -84,7 +105,7 @@ const Ingredientes = ({
                              onChange={handleOnChange} /> Seleccionar todo | <input type="checkbox" /> Deseleccionar todo</h6>
                 <hr className="azul" />
 
-                <table className="table text-center mt-3 " >
+                <table className="table table-striped table-hover text-center mt-3 " >
                     <thead>
                         <tr>
                             <th >Selecciona</th>
@@ -95,13 +116,18 @@ const Ingredientes = ({
                     </thead>
                       {  
                       listaReseta.map((e, i) => (
-                    <tbody key={i}>
-                      
-                      
-                          
-                        <tr  >
+                    <tbody >
+                     
+                        <tr  key={i}>
                             
-                            <td><input id="check" type="checkbox" name="seleccion" value={e.price} onChange={handleChangeChekBox}/></td>
+                            <td><input 
+                            id={`custom-checkbox-${i}`}
+                            type="checkbox" 
+                            name={e.product} 
+                            value={e.product} 
+                            checked={checkedState[i]}
+                            onChange={() => handleOnChange(i)}/></td>
+
                             <td ><input id="number" className="azul" type="number" name='cantidad' onChange={handleChangeNumber}  /></td>
                             <td class="text-start">
                                 <tr>{e.product}</tr>
@@ -124,17 +150,17 @@ const Ingredientes = ({
                     <h6 className='mb-3'>Items:  {isChecked ? "Seleccionaste todos los productos" : ""}</h6>
                     <h6 className='mb-3'>Subtotal</h6>
                     <h6 className='mb-3'>Gastos de envío {price}</h6>
-                    <h6 className='mb-3'>Total {checkSelecte}</h6>
+                    <h6 className='mb-3'>Total: {getFormattedPrice(total)}</h6>
           
                     <div className="d-grid gap-2">
                         <Button id="pagar" variant="success" size="lg" className='mb-2'>
-                            Comprar ingredientes:
+                            Comprar ingredientes: {getFormattedPrice(total)}
                         </Button>
                     </div>
                 </div>
             </div>
         </div>
-    )
+    )   
 }
 
 export default Ingredientes

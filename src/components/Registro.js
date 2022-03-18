@@ -24,7 +24,7 @@ export const Registro = () => {
 
     return (
         <div>
-            <Container className="mt-4">
+            <Container className="contenLogin mt-4">
             <Form id="Form" onSubmit={handleRegistro}
             >
                 <Form.Group className="mb-3" controlId="formBasicName">
