@@ -12,11 +12,11 @@ const Ingredientes = ({
     result
 }) => {
 
-    const [isChecked, setIsChecked] = useState(false);
+    // const [isChecked, setIsChecked] = useState(false);
 
-    const handleOnChange2 = () => {
-      setIsChecked(!isChecked);
-    };
+    // const handleOnChange2 = () => {
+    //   setIsChecked(!isChecked);
+    // };
 
     const navigate = useNavigate();
     // console.log(values.cantidad,values.seleccion)
@@ -101,8 +101,8 @@ const Ingredientes = ({
                     <h6>INGREDIENTES</h6>
                     <h1>Risotto de setas (vegano)</h1>
                 </div>
-                <h6 className="azul"><input type="checkbox" checked={isChecked}
-                             onChange={handleOnChange} /> Seleccionar todo | <input type="checkbox" /> Deseleccionar todo</h6>
+                {/* <h6 className="azul"><input type="checkbox" checked={isChecked}
+                             onChange={handleOnChange} /> Seleccionar todo | <input type="checkbox" /> Deseleccionar todo</h6> */}
                 <hr className="azul" />
 
                 <table className="table table-striped table-hover text-center mt-3 " >
@@ -147,7 +147,7 @@ const Ingredientes = ({
                 <hr />
                 <div className='container '>
 
-                    <h6 className='mb-3'>Items:  {isChecked ? "Seleccionaste todos los productos" : ""}</h6>
+                    <h6 className='mb-3'>Items:  </h6>
                     <h6 className='mb-3'>Subtotal</h6>
                     <h6 className='mb-3'>Gastos de envío {price}</h6>
                     <h6 className='mb-3'>Total: {getFormattedPrice(total)}</h6>
