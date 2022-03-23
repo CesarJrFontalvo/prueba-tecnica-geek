@@ -1,7 +1,7 @@
 
 import  { typesReseta} from '../types/types';
 import { db } from "../firebase/firebaseConfig";
-import { collection,getDocs} from "@firebase/firestore";
+import { collection,getDocs, query,where,updateDoc,doc,addDoc} from "@firebase/firestore";
 
 
 // READ
@@ -26,6 +26,7 @@ export const listSync = (listaReseta) => {
     }
 }
 // BUSQUEDA------------------------------------------------
+
 // export const listSearch = (searchText) => {
     
 //     return async (dispatch) => {
@@ -52,29 +53,32 @@ export const listSync = (listaReseta) => {
 //         payload: search
 //     }
 // }
+
 // ------REGISTRAR---------------------------------------------------------
-// export const registerEmployeeAsync = (newEmployee) => {
 
-//     return(dispatch) => {
 
-//         addDoc(collection(db,"registroPeliculas"),newEmployee)
-//         .then(resp => {
-//             dispatch(registerEmployeeSync(newEmployee))
-//              dispatch(listEmployeeAsync())
-//         })
-//         .catch(error => {
-//             console.log(error);
-//         })
-//     }
-//  }
+export const registeIngredienteAsync = (newIngrediente) => {
 
-// export const registerEmployeeSync = (listaPelicula) => {
-//     return{
-//         type: typesRegistroPelicula.register,
-//         payload: listaPelicula
-//     }
+    return(dispatch) => {
 
-// }
+        addDoc(collection(db,"registroPeliculas"),newIngrediente)
+        .then(resp => {
+            dispatch(registeIngredienteSync(newIngrediente))
+             dispatch(listResetaAsync())
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+ }
+
+export const registeIngredienteSync = (listaReseta) => {
+    return{
+        type: typesReseta.register,
+        payload: listaReseta
+    }
+
+}
 // -------------------------------------------------------------
 
 // ---------ELIMINAR----------------------------------------------------------
@@ -99,3 +103,19 @@ export const listSync = (listaReseta) => {
 //         payload: nombre
 //     }
 // }
+// ACTUALIZAR---------------------
+export const editarProductoAsync = (data) => {
+    console.log(data)
+    return async(dispatch) => {
+        console.log(data.url)
+        const productsCollection = collection(db,"Risotto");
+        const q = query(productsCollection,where("product", "==" ,data.product)) 
+
+        const datos = await getDocs(q); 
+
+        datos.forEach((docu) => {
+            updateDoc(doc(db,"Risotto",docu.id), data);
+        })
+        dispatch(listResetaAsync());
+    }
+}

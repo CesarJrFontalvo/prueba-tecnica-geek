@@ -17,7 +17,10 @@ export const resetaReducers = (state = initialState, action) => {
             return {
                 listaReseta: [...action.payload]
             }
-       
+        case typesReseta.update:
+            return {
+                    // products: [...action.payload]
+             }
         case typesReseta.delete:
             return {
                 listaReseta: state.listaReseta.filter(emp => emp.correo !== action.payload)

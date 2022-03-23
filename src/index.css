@@ -34,3 +34,15 @@ height: 10%;
   width: 25vw;
   height: 50vh;
 }
+#items{
+  text-align: end;
+}
+h6{
+  color: rgb(175, 172, 172);
+}
+.total{
+  color: black;
+}
+strong{
+  color: #198754;
+}
