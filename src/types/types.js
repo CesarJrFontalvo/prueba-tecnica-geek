@@ -3,7 +3,8 @@ export const typesReseta = {
     register: 'Register',
     list: 'List',
     update: 'Update',
-    delete: 'Delete'
+    delete: 'Delete',
+
 }
 export const types = {
     login: 'login',

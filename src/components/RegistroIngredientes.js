@@ -4,6 +4,10 @@ import { Container, Nav, Navbar ,Button} from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../actions/actionLogin';
+import Lista from './Lista';
+import {registrarProductoAsync} from '../actions/actionReseta';
+import { useFormik } from 'formik'
+
 
 
 const RegistroIngredientes = () => {
@@ -15,6 +19,20 @@ const RegistroIngredientes = () => {
         dispatch(logout())
         navigate("/")
     }
+
+    const formik = useFormik({
+        initialValues: {
+            product: '',
+            marca: '',
+            quantity: '',
+            price: ''
+
+        },
+        onSubmit: (data) => {
+            dispatch(registrarProductoAsync(data))
+        },
+    })
+  
   return (
     <div className='mb-5'>
          <Navbar className='car sticky-top ' bg="">
@@ -28,6 +46,67 @@ const RegistroIngredientes = () => {
                     <Button variant="danger" onClick={() => handleLogout()}>Logout</Button>
                 </Container>
             </Navbar>
+            <div className="container mt-5">
+
+<hr />
+<div className="row">
+
+    <div div className="col-12">
+        <h3 className="text-center"> Agregar un nuevo Producto </h3>
+        <Container  className="contenLogin mt-4">
+        <form className="form-group" onSubmit={formik.handleSubmit}>
+         
+
+            <input
+                type="text"
+                className="form-control mt-2"
+                name="product"
+                autoComplete="off"
+                placeholder="Producto"
+                onChange={formik.handleChange}
+                required />
+
+            <input
+                type="text"
+                className="form-control mt-2"
+                name="marca"
+                autoComplete="off"
+                placeholder="Marca"
+                onChange={formik.handleChange}
+                required />
+
+            <input
+                type="text"
+                className="form-control mt-2"
+                name="quantity"
+                autoComplete="off"
+                placeholder="Cantidad (Kg, Lts, etc)"
+                onChange={formik.handleChange}
+                required />
+
+            <input
+                type="text"
+                className="form-control mt-2"
+                name="price"
+                autoComplete="off"
+                placeholder="Precio"
+                onChange={formik.handleChange}
+               />
+
+            <div className="d-grid gap-2 mx-auto mt-2">
+                <input
+                    value="Guardar"
+                    type="submit"
+                    className="btn btn-success"
+                />
+            </div>
+        </form>
+        </Container>
+    </div>
+</div>
+</div>
+            <Lista/>
+
     </div>
   )
 }
